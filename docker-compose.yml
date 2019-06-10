@@ -1,5 +1,16 @@
 version: '2'
 services:
+  haproxy:
+    container_name: zl_haproxy
+    image: haproxy:1.9-rc-alpine
+    restart: always
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    expose:
+      - 7420
+    ports:
+      - "7420:7420"
+      - "1188:1188"
   sslocal:
     container_name: zl_sslocal
     image: sunteya/shadowsocks:2.6.8
@@ -24,3 +35,12 @@ services:
       - "8123:8123"
     restart: always
     #command: [ "socksParentProxy=$SSLOCAL_PORT_1080_TCP_ADDR:1080" ]
+  cow:
+    container_name: zl_cow
+    image: xiaoxinyi/cow
+    restart: always
+    tty: true
+    ports:
+      - '9999:7777'
+    volumes:
+      - ./rc:/root/.cow/rc
